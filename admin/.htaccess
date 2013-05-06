@@ -1,0 +1,5 @@
+AuthType Basic
+AuthName "Enter your ID & Password"
+AuthUserFile D:\xampp\htdocs\public_html\contacts_php\admin\.htpasswd
+require valid-user
+

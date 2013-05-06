@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 		$stmt->execute($params);
 
 		// ありがとうページヘ
-		header('Location: ' . SITE_URL . 'thanks.html');
+		header('Location: ' . SITE_URL . 'thanks.php');
 		exit;
 	}
 }
@@ -79,5 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 			<p><input type="submit" value="送信" /></p>
 			<input type="hidden" name="token" value="<?php echo h($_SESSION['token']); ?>" />
 		</form>
+		<p><a href="<?php echo ADMIN_URL; ?>">管理者メニューへ</a></p>
 	</body>
 </html>
