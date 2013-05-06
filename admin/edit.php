@@ -4,9 +4,26 @@ require_once '../functions.php';
 
 session_start();
 
+$dbh = connectDb();
+
+if (preg_match('/^[1-9][0-9]*$/', $_GET['id'])) {
+	$id = (int)$_GET['id'];
+} else {
+	echo '不正なIDです！';
+	exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 	// 投稿前
 	setToken();
+
+	$stmt = $dbh->prepare('select * from entries where id = :id limit 1');
+	$stmt->execute(array(':id'=>$id));
+	$entry = $stmt->fetch() or die('no one found!');
+
+	$name = $entry['name'];
+	$email = $entry['email'];
+	$memo = $entry['memo'];
 
 } else {
 	// 投稿後
@@ -30,8 +47,22 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 	}
 
 	if (empty($error)) {
-		// DB登録
-		$dbh = connectDb();
+		// DB更新
+		$sql = 'update entries set
+					name = :name
+					, email = :email
+					, memo = :memo
+					, modified = now()
+				where id = :id';
+		$stmt = $dbh->prepare($sql);
+		
+		$params = array(
+			':name' => $name
+			, ':email' => $email
+			, ':memo' => $memo
+			, ':id' => $id
+		);
+		$stmt->execute($params);
 
 		// ありがとうページヘ
 		header('Location: ' . ADMIN_URL);
