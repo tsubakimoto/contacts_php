@@ -7,6 +7,7 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 	// 投稿前
 	setToken();
+	
 } else {
 	// 投稿後
 	checkToken();
